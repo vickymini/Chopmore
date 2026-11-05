@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sign in or register for Chope More Fast Food & Restaurant. Order authentic Nigerian dishes, book dining tables, and manage your account.">
+    <title>Sign In & Register | Chope More Fast Food</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/egusi 2.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Jost:wght@300;400;500;600;700&family=Noto+Sans+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/accountlogin.css">
+</head>
+<body>
+    <!-- Top Navigation Header -->
+    <header class="auth-header">
+        <div class="header-container">
+            <a href="index.html" class="brand-link" title="Return to Chope More Home">
+                <span class="logo-script">Chope More</span>
+                <span class="logo-badge">Fast Food &amp; Restaurant</span>
+            </a>
+            <a href="index.html" class="nav-back-link">
+                <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+                <span>Back to Restaurant</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="auth-main">
+        <div class="auth-card" id="authCard">
+            <!-- Brand Badge & Header -->
+            <div class="auth-card-header">
+                <div class="brand-avatar" aria-hidden="true">
+                    <i class="fa-solid fa-utensils"></i>
+                </div>
+                <h1 class="auth-title" id="authHeading">Welcome to Chope More</h1>
+                <p class="auth-subtitle">Authentic Nigerian flavors, made fresh daily</p>
+            </div>
+
+            <!-- Segmented Tab Navigation -->
+            <div class="auth-tabs" role="tablist" aria-label="Sign In or Registration">
+                <button type="button" 
+                        class="tab-btn active" 
+                        id="tabLogin" 
+                        role="tab" 
+                        aria-selected="true" 
+                        aria-controls="panelLogin" 
+                        tabindex="0">
+                    <i class="fa-solid fa-arrow-right-to-bracket" aria-hidden="true"></i>
+                    <span>Log In</span>
+                </button>
+                <button type="button" 
+                        class="tab-btn" 
+                        id="tabRegister" 
+                        role="tab" 
+                        aria-selected="false" 
+                        aria-controls="panelRegister" 
+                        tabindex="-1">
+                    <i class="fa-solid fa-user-plus" aria-hidden="true"></i>
+                    <span>Register</span>
+                </button>
+            </div>
+
+            <!-- Tab Panels Container -->
+            <div class="tab-panels-wrapper">
+                
+                <!-- Log In Panel -->
+                <section class="tab-panel active" 
+                         id="panelLogin" 
+                         role="tabpanel" 
+                         aria-labelledby="tabLogin">
+                    <form id="formLogin" class="auth-form" novalidate>
+                        <!-- Email Input -->
+                        <div class="form-group">
+                            <label for="loginEmail" class="form-label">Email Address</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-envelope input-icon" aria-hidden="true"></i>
+                                <input type="email" 
+                                       id="loginEmail" 
+                                       name="email" 
+                                       class="form-input" 
+                                       placeholder="e.g. yourname@example.com" 
+                                       autocomplete="email" 
+                                       required>
+                            </div>
+                            <span class="field-error" id="loginEmailError" aria-live="polite"></span>
+                        </div>
+
+                        <!-- Password Input -->
+                        <div class="form-group">
+                            <div class="label-row">
+                                <label for="loginPassword" class="form-label">Password</label>
+                                <button type="button" class="text-link-btn" id="openForgotModal">Forgot Password?</button>
+                            </div>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-lock input-icon" aria-hidden="true"></i>
+                                <input type="password" 
+                                       id="loginPassword" 
+                                       name="password" 
+                                       class="form-input" 
+                                       placeholder="Enter your password" 
+                                       autocomplete="current-password" 
+                                       required>
+                                <button type="button" 
+                                        class="password-toggle-btn" 
+                                        data-target="loginPassword" 
+                                        aria-label="Show password" 
+                                        title="Toggle password visibility">
+                                    <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <span class="field-error" id="loginPasswordError" aria-live="polite"></span>
+                        </div>
+
+                        <!-- Options Row: Remember Me -->
+                        <div class="form-options">
+                            <label class="custom-checkbox" for="loginRemember">
+                                <input type="checkbox" id="loginRemember" name="remember">
+                                <span class="checkbox-indicator" aria-hidden="true"></span>
+                                <span class="checkbox-label">Remember me</span>
+                            </label>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="form-action">
+                            <button type="submit" class="btn-primary" id="loginSubmitBtn">
+                                <span class="btn-spinner" aria-hidden="true"></span>
+                                <span class="btn-text">Sign In</span>
+                                <i class="fa-solid fa-arrow-right btn-icon" aria-hidden="true"></i>
+                            </button>
+                        </div>
+
+                        <!-- Quick Guest Order Option -->
+                        <div class="divider">
+                            <span>or explore directly</span>
+                        </div>
+                        <a href="index.html#menu" class="btn-secondary">
+                            <i class="fa-solid fa-utensils" aria-hidden="true"></i>
+                            <span>Continue to Menu as Guest</span>
+                        </a>
+
+                        <!-- Panel Switch Footer -->
+                        <div class="panel-switch-footer">
+                            <span>Don't have an account yet?</span>
+                            <button type="button" class="link-btn-highlight" id="switchToRegister">Create an Account</button>
+                        </div>
+                    </form>
+                </section>
+
+                <!-- Register Panel -->
+                <section class="tab-panel" 
+                         id="panelRegister" 
+                         role="tabpanel" 
+                         aria-labelledby="tabRegister" 
+                         hidden>
+                    <form id="formRegister" class="auth-form" novalidate>
+                        <!-- Name Input -->
+                        <div class="form-group">
+                            <label for="registerName" class="form-label">Full Name</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-user input-icon" aria-hidden="true"></i>
+                                <input type="text" 
+                                       id="registerName" 
+                                       name="name" 
+                                       class="form-input" 
+                                       placeholder="e.g. Amaka Okafor" 
+                                       autocomplete="name" 
+                                       required>
+                            </div>
+                            <span class="field-error" id="registerNameError" aria-live="polite"></span>
+                        </div>
+
+                        <!-- Email Input -->
+                        <div class="form-group">
+                            <label for="registerEmail" class="form-label">Email Address</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-envelope input-icon" aria-hidden="true"></i>
+                                <input type="email" 
+                                       id="registerEmail" 
+                                       name="email" 
+                                       class="form-input" 
+                                       placeholder="e.g. amaka@example.com" 
+                                       autocomplete="email" 
+                                       required>
+                            </div>
+                            <span class="field-error" id="registerEmailError" aria-live="polite"></span>
+                        </div>
+
+                        <!-- Password Input -->
+                        <div class="form-group">
+                            <label for="registerPassword" class="form-label">Password</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-lock input-icon" aria-hidden="true"></i>
+                                <input type="password" 
+                                       id="registerPassword" 
+                                       name="password" 
+                                       class="form-input" 
+                                       placeholder="At least 6 characters" 
+                                       autocomplete="new-password" 
+                                       minlength="6" 
+                                       required>
+                                <button type="button" 
+                                        class="password-toggle-btn" 
+                                        data-target="registerPassword" 
+                                        aria-label="Show password" 
+                                        title="Toggle password visibility">
+                                    <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <span class="field-hint">Minimum 6 characters</span>
+                            <span class="field-error" id="registerPasswordError" aria-live="polite"></span>
+                        </div>
+
+                        <!-- Confirm Password Input -->
+                        <div class="form-group">
+                            <label for="registerConfirmPassword" class="form-label">Confirm Password</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-shield-halved input-icon" aria-hidden="true"></i>
+                                <input type="password" 
+                                       id="registerConfirmPassword" 
+                                       name="confirmPassword" 
+                                       class="form-input" 
+                                       placeholder="Re-enter your password" 
+                                       autocomplete="new-password" 
+                                       required>
+                                <button type="button" 
+                                        class="password-toggle-btn" 
+                                        data-target="registerConfirmPassword" 
+                                        aria-label="Show password" 
+                                        title="Toggle password visibility">
+                                    <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <span class="field-error" id="registerConfirmError" aria-live="polite"></span>
+                        </div>
+
+                        <!-- Terms of Service Checkbox -->
+                        <div class="form-options">
+                            <label class="custom-checkbox" for="registerTerms">
+                                <input type="checkbox" id="registerTerms" name="terms" required>
+                                <span class="checkbox-indicator" aria-hidden="true"></span>
+                                <span class="checkbox-label">I agree to the <a href="#" id="openTermsLink" class="text-underline">Terms of Service</a> &amp; Privacy Policy</span>
+                            </label>
+                            <span class="field-error" id="registerTermsError" aria-live="polite"></span>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="form-action">
+                            <button type="submit" class="btn-primary" id="registerSubmitBtn">
+                                <span class="btn-spinner" aria-hidden="true"></span>
+                                <span class="btn-text">Create Account</span>
+                                <i class="fa-solid fa-user-check btn-icon" aria-hidden="true"></i>
+                            </button>
+                        </div>
+
+                        <!-- Panel Switch Footer -->
+                        <div class="panel-switch-footer">
+                            <span>Already have an account?</span>
+                            <button type="button" class="link-btn-highlight" id="switchToLogin">Log In Here</button>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Forgot Password Modal -->
+    <div class="modal-backdrop" id="forgotModalBackdrop" hidden>
+        <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">
+                    <i class="fa-solid fa-key" aria-hidden="true"></i>
+                    Reset Your Password
+                </h3>
+                <button type="button" class="modal-close-btn" id="closeForgotModal" aria-label="Close dialog">
+                    <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-description">Enter the email associated with your Chope More account. We'll send you instructions to reset your password.</p>
+                <form id="formForgotPassword" novalidate>
+                    <div class="form-group">
+                        <label for="forgotEmail" class="form-label">Account Email</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-envelope input-icon" aria-hidden="true"></i>
+                            <input type="email" id="forgotEmail" class="form-input" placeholder="e.g. yourname@example.com" required>
+                        </div>
+                        <span class="field-error" id="forgotEmailError" aria-live="polite"></span>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-secondary" id="cancelForgotModal">Cancel</button>
+                        <button type="submit" class="btn-primary" id="sendResetBtn">
+                            <span class="btn-spinner" aria-hidden="true"></span>
+                            <span class="btn-text">Send Reset Link</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Terms Modal -->
+    <div class="modal-backdrop" id="termsModalBackdrop" hidden>
+        <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="termsModalTitle">
+            <div class="modal-header">
+                <h3 class="modal-title" id="termsModalTitle">
+                    <i class="fa-solid fa-book-open" aria-hidden="true"></i>
+                    Terms &amp; Conditions
+                </h3>
+                <button type="button" class="modal-close-btn" id="closeTermsModal" aria-label="Close dialog">
+                    <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="terms-content">
+                    <h4>1. Fast &amp; Fresh Food Delivery</h4>
+                    <p>All orders placed through Chope More Fast Food are prepared fresh upon confirmation. Delivery times vary according to your location and current kitchen traffic.</p>
+                    
+                    <h4>2. Table Reservations</h4>
+                    <p>Table bookings are held for a maximum of 20 minutes past the scheduled booking time before being released to walk-in guests.</p>
+                    
+                    <h4>3. Account Privacy</h4>
+                    <p>Your personal credentials and order details are handled with strict confidentiality. We do not sell or distribute your private information.</p>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-primary" id="acceptTermsModal">I Understand</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Custom JavaScript -->
+    <script src="js/accountlogin.js"></script>
+</body>
+</html>
