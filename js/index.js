@@ -58,6 +58,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const desktopNavLinks = document.querySelectorAll('.desktop-nav .nav-link');
 
   function updateActiveNavOnScroll() {
+    const isAtBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 60);
+    if (isAtBottom) {
+      desktopNavLinks.forEach((link) => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#footer') {
+          link.classList.add('active');
+        }
+      });
+      return;
+    }
+
     const scrollPos = window.scrollY + 120;
     sections.forEach((sec) => {
       const top = sec.offsetTop;
@@ -81,7 +92,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // 4. User Authentication State (LocalStorage Sync)
   // =========================================================================
   const headerAuthWidget = document.getElementById('headerAuthWidget');
-  const mobileAuthLink = document.getElementById('mobileAuthLink');
 
   function syncUserState() {
     const sessionDataRaw = localStorage.getItem('laHotActiveSession');
@@ -93,6 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
         session = null;
       }
     }
+
+    const currentMobileAuth = document.getElementById('mobileAuthLink');
 
     if (session && session.loggedIn && session.name) {
       // User is logged in
@@ -117,13 +129,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      if (mobileAuthLink) {
-        mobileAuthLink.innerHTML = `
+      if (currentMobileAuth) {
+        const freshMobileAuth = currentMobileAuth.cloneNode(true);
+        currentMobileAuth.parentNode.replaceChild(freshMobileAuth, currentMobileAuth);
+        freshMobileAuth.innerHTML = `
           <i class="fa-solid fa-user-check"></i>
           <span>Signed in as ${escapeHtml(session.name)} (Sign Out)</span>
         `;
-        mobileAuthLink.setAttribute('href', '#');
-        mobileAuthLink.addEventListener('click', (e) => {
+        freshMobileAuth.setAttribute('href', '#');
+        freshMobileAuth.addEventListener('click', (e) => {
           e.preventDefault();
           localStorage.removeItem('laHotActiveSession');
           showToast('You have been signed out.', 'info');
@@ -134,19 +148,21 @@ document.addEventListener('DOMContentLoaded', () => {
       // User is guest
       if (headerAuthWidget) {
         headerAuthWidget.innerHTML = `
-          <a href="accoutnlogin.html" class="btn-auth-link" id="authBtnLink">
+          <a href="accountlogin.html" class="btn-auth-link" id="authBtnLink">
             <i class="fa-solid fa-user" aria-hidden="true"></i>
             <span>Log In</span>
           </a>
         `;
       }
 
-      if (mobileAuthLink) {
-        mobileAuthLink.innerHTML = `
+      if (currentMobileAuth) {
+        const freshMobileAuth = currentMobileAuth.cloneNode(true);
+        currentMobileAuth.parentNode.replaceChild(freshMobileAuth, currentMobileAuth);
+        freshMobileAuth.innerHTML = `
           <i class="fa-solid fa-user"></i>
           <span>Sign In / Register</span>
         `;
-        mobileAuthLink.setAttribute('href', 'accoutnlogin.html');
+        freshMobileAuth.setAttribute('href', 'accountlogin.html');
       }
     }
   }
@@ -186,7 +202,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const savedCart = localStorage.getItem('chopeMoreCart');
   if (savedCart) {
     try {
-      cart = JSON.parse(savedCart);
+      const parsed = JSON.parse(savedCart);
+      cart = Array.isArray(parsed) ? parsed : [];
     } catch (e) {
       cart = [];
     }
@@ -387,6 +404,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (orderCheckoutForm) {
     orderCheckoutForm.addEventListener('submit', (e) => {
       e.preventDefault();
+      if (btnSubmitOrder && btnSubmitOrder.classList.contains('loading')) return;
 
       if (cart.length === 0) {
         showToast('Your order is empty. Please select some dishes first!', 'error');
@@ -407,7 +425,7 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         btnSubmitOrder.classList.remove('loading');
         const orderSummary = `Thank you, ${name}! Your order of ₦${getCartTotalAmount().toLocaleString()} is confirmed and will be delivered to ${address}.`;
-        
+
         // Clear cart
         cart = [];
         saveCart();
@@ -431,7 +449,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const name = document.getElementById('orderCustomerName').value.trim() || 'Valued Customer';
       const phone = document.getElementById('orderCustomerPhone').value.trim() || 'Not provided';
       const address = document.getElementById('orderCustomerAddress').value.trim() || 'Pickup / Direct order';
-      const payment = document.getElementById('orderPaymentMethod') ? document.getElementById('orderPaymentMethod').value : 'delivery';
+      const paymentSelect = document.getElementById('orderPaymentMethod');
+      const payment = paymentSelect ? paymentSelect.options[paymentSelect.selectedIndex].text : 'Pay on Delivery';
 
       let itemsText = cart.map(item => `• ${item.name} x ${item.quantity} = ₦${(item.price * item.quantity).toLocaleString()}`).join('\n');
       const totalText = `₦${getCartTotalAmount().toLocaleString()}`;
@@ -462,25 +481,35 @@ document.addEventListener('DOMContentLoaded', () => {
   const tableReservationForm = document.getElementById('tableReservationForm');
   const reserveSubmitBtn = document.getElementById('reserveSubmitBtn');
 
+  function formatLocalDateTime(date) {
+    const pad = (n) => String(n).padStart(2, '0');
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+  }
+
+  function getTomorrowEvening() {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(19, 0, 0, 0);
+    return tomorrow;
+  }
+
   if (tableReservationForm) {
-    // Set default datetime to tomorrow at 7:00 PM
+    // Set default datetime to tomorrow at 7:00 PM local time
     const dateInput = document.getElementById('reserveDateTime');
     if (dateInput) {
-      const tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      tomorrow.setHours(19, 0, 0, 0);
-      const isoString = tomorrow.toISOString().slice(0, 16);
-      dateInput.min = new Date().toISOString().slice(0, 16);
-      dateInput.value = isoString;
+      dateInput.min = formatLocalDateTime(new Date());
+      dateInput.value = formatLocalDateTime(getTomorrowEvening());
     }
 
     tableReservationForm.addEventListener('submit', (e) => {
       e.preventDefault();
+      if (reserveSubmitBtn && reserveSubmitBtn.classList.contains('loading')) return;
 
       const name = document.getElementById('reserveName').value.trim();
       const phone = document.getElementById('reservePhone').value.trim();
       const email = document.getElementById('reserveEmail').value.trim();
-      const guests = document.getElementById('reserveGuests').value;
+      const guestsSelect = document.getElementById('reserveGuests');
+      const guests = guestsSelect ? guestsSelect.options[guestsSelect.selectedIndex].text : '2 Persons';
       const datetime = document.getElementById('reserveDateTime').value;
 
       if (!name || !phone || !email || !datetime) {
@@ -488,7 +517,19 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      const formattedDate = new Date(datetime).toLocaleString('en-US', {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        showToast('Please enter a valid email address for confirmation.', 'error');
+        return;
+      }
+
+      const selectedDate = new Date(datetime);
+      if (selectedDate <= new Date()) {
+        showToast('Please select a date and time in the future.', 'error');
+        return;
+      }
+
+      const formattedDate = selectedDate.toLocaleString('en-US', {
         dateStyle: 'medium',
         timeStyle: 'short'
       });
@@ -497,10 +538,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       setTimeout(() => {
         reserveSubmitBtn.classList.remove('loading');
-        showToast(`Table reserved for ${name} (${guests} guests) on ${formattedDate}! Confirmation sent to ${email}.`, 'success', 6000);
+        showToast(`Table reserved for ${name} (${guests}) on ${formattedDate}! Confirmation sent to ${email}.`, 'success', 6000);
         tableReservationForm.reset();
         if (dateInput) {
-          dateInput.value = new Date().toISOString().slice(0, 16);
+          dateInput.min = formatLocalDateTime(new Date());
+          dateInput.value = formatLocalDateTime(getTomorrowEvening());
         }
       }, 900);
     });
@@ -550,8 +592,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function escapeHtml(str) {
     if (!str) return '';
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 });

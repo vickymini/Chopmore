@@ -677,6 +677,10 @@ body {
     transition: opacity 0.3s ease;
 }
 
+.modal-backdrop[hidden] {
+    display: none !important;
+}
+
 .modal-backdrop:not([hidden]) {
     opacity: 1;
     pointer-events: auto;

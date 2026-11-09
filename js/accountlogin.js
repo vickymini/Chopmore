@@ -204,6 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (formLogin) {
         formLogin.addEventListener('submit', (e) => {
             e.preventDefault();
+            if (loginSubmitBtn && loginSubmitBtn.classList.contains('loading')) return;
             let isValid = true;
 
             const emailVal = loginEmail.value.trim();
@@ -281,6 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (formRegister) {
         formRegister.addEventListener('submit', (e) => {
             e.preventDefault();
+            if (registerSubmitBtn && registerSubmitBtn.classList.contains('loading')) return;
             let isValid = true;
 
             const nameVal = registerName.value.trim();
@@ -412,6 +414,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (formForgotPassword) {
         formForgotPassword.addEventListener('submit', (e) => {
             e.preventDefault();
+            if (sendResetBtn && sendResetBtn.classList.contains('loading')) return;
             const emailVal = forgotEmail.value.trim();
 
             if (!emailVal) {
@@ -515,8 +518,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function escapeHtml(str) {
-        const div = document.createElement('div');
-        div.textContent = str;
-        return div.innerHTML;
+        if (!str) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
     }
 });
